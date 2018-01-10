@@ -19,6 +19,7 @@ from Shop.settings import MEDIA_ROOT
 from django.views.static import serve
 from goods.views import GoodsListViewSet, CategoryViewset
 from rest_framework.documentation import include_docs_urls
+from rest_framework.authtoken import views
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
@@ -27,7 +28,6 @@ router = DefaultRouter()
 router.register(r'goods', GoodsListViewSet, base_name="goods")
 router.register(r'categorys', CategoryViewset, base_name="categorys")  # 同m样适用于获取获取单一个对象的详情
 
-
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
     url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
@@ -35,4 +35,5 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'docs/', include_docs_urls(title="慕学生鲜")),
     url(r'^api-auth/', include('rest_framework.urls')),
+    url(r'^api-token-auth/', views.obtain_auth_token),  # 获取token
 ]
