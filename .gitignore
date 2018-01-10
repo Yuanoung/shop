@@ -1,3 +1,4 @@
 online-store/node_modules/
 */.idea/
 *.pyc
+.idea/
