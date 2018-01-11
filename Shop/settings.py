@@ -130,12 +130,21 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+AUTHENTICATION_BACKENDS = (
+    'users.views.CustomBackend',
+)
+import datetime
 
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
+    'JWT_AUTH_HEADER_PREFIX': 'JWT',
+}
 REST_FRAMEWORK = {  # 总的配置文件
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',  # 在访问公共数据时，有可能出错，所以不应该在全局设置
     ),
     # 'DEFAULT_THROTTLE_CLASSES': (
     #     'rest_framework.throttling.AnonRateThrottle',

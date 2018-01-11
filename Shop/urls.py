@@ -16,6 +16,7 @@ Including another URLconf
 import xadmin
 from django.conf.urls import url, include
 from Shop.settings import MEDIA_ROOT
+from rest_framework_jwt.views import obtain_jwt_token
 from django.views.static import serve
 from goods.views import GoodsListViewSet, CategoryViewset
 from rest_framework.documentation import include_docs_urls
@@ -36,4 +37,6 @@ urlpatterns = [
     url(r'docs/', include_docs_urls(title="慕学生鲜")),
     url(r'^api-auth/', include('rest_framework.urls')),
     url(r'^api-token-auth/', views.obtain_auth_token),  # 获取token
+    # url(r'^api-jwt-auth/', obtain_jwt_token),
+    url(r'^login/', obtain_jwt_token),
 ]
