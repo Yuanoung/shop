@@ -157,3 +157,9 @@ REST_FRAMEWORK = {  # 总的配置文件
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     # 'PAGE_SIZE': 10
 }
+
+# 手机号码正则表达式
+REGEX_MOBILE = "^1[358]\d{9}$|^147\d{8}$|^176\d{8}$"
+
+# 云片网
+API_KEY = "d6c4ddbf50ab36611d2f52041a0b949e"
