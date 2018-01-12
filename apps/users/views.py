@@ -1,14 +1,17 @@
 from random import choice
+
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.contrib.auth.backends import ModelBackend
 from rest_framework.mixins import CreateModelMixin
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, mixins, authentication
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from rest_framework_jwt.serializers import jwt_encode_handler, jwt_payload_handler
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from .models import VerifyCode
-from .serializers import SmsSerializer, UserRegisterSerializer
+from .serializers import SmsSerializer, UserRegisterSerializer, UserDetailSerializer
 from utils.yunpian import YunPian
 from Shop.settings import API_KEY
 
@@ -59,11 +62,28 @@ class SmsCodeViewset(CreateModelMixin, viewsets.GenericViewSet):
             return Response({"mobile": mobile}, status=status.HTTP_201_CREATED)
 
 
-class UserViewset(CreateModelMixin, viewsets.GenericViewSet):
+class UserViewset(CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """
     用户
     """
     serializer_class = UserRegisterSerializer
+    authentication_classes = (authentication.SessionAuthentication, JSONWebTokenAuthentication)
+
+    # permission_classes = (IsAuthenticated,)
+    def get_serializer_class(self):
+        if self.action == "create":
+            return UserRegisterSerializer
+        return UserDetailSerializer
+
+    def get_permissions(self):
+        if self.action == "retrieve":
+            return [IsAuthenticated()]
+        elif self.action == "create":
+            return []
+        return []
+
+    def get_object(self):
+        return self.request.user
 
     def get_queryset(self):
         return User.objects.all()
