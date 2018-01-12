@@ -23,6 +23,7 @@ from rest_framework_jwt.views import obtain_jwt_token
 
 from Shop.settings import MEDIA_ROOT
 from goods.views import GoodsListViewSet, CategoryViewset
+
 from user_operation.views import UserFavViewset
 
 from users.views import SmsCodeViewset, UserViewset
